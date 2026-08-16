@@ -1,6 +1,3 @@
-Aqui está a complementação do seu `README.md` atualizada com tudo o que implementamos até o momento: a inclusão do **Jinja2 + Tailwind CSS** para renderização da interface web, as novas rotas do **Formulário HTML**, e o estudo de segurança com o **Diagrama de Fluxo de Dados (DFD)** do Exercício 8.
-
----
 
 ```markdown
 # 📅 FastAPI Eventos API
