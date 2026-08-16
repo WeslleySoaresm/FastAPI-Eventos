@@ -1,5 +1,4 @@
 
-```markdown
 # 📅 FastAPI Eventos API
 
 API RESTful desenvolvida com **FastAPI** e **Pydantic** para gerenciamento de eventos e tarefas. O projeto contempla operações completas de CRUD, validação de dados em tempo de execução, interface web interativa renderizada com **Jinja2** e **Tailwind CSS**, além de documentação automática OpenAPI/Swagger.
@@ -99,7 +98,5 @@ uvicorn main:app --reload
 * **Documentação Swagger:** `http://127.0.0.1:8000/docs`
 
 
-
-```
 
 ```
