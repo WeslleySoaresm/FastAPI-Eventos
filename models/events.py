@@ -7,6 +7,8 @@ from pydantic import BaseModel
 class Event(BaseModel):
     id: Optional[int] = None 
     title: str
+    date: str # ex: "2026-09-20"
+    organizer: str #organizador
     image: str
     description: str
     tags: List[str] 
@@ -17,6 +19,8 @@ class Event(BaseModel):
         schema_extra = {
             "example": {
                 "title": "FastAPI Book Launch",
+                "date": "2026-09-20",
+                "organizer": "Organizador",
                 "image": "https://linktomyimage.com/image.png",
                 "description": "We will be discussing the contents of the FastAPI book in this event.Ensure to come with your own copy to win gifts!",
                 "tags": ["python", "fastapi", "book", "launch"],

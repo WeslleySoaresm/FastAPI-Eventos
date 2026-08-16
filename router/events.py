@@ -1,13 +1,31 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from models.events import Event
+
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from data.db import events #Importando o db que esta em memoria
+
+
+
 event_router = APIRouter(
     tags=["Events"]
 )
 
+# Configura o diretório de templates Jinja2
+templates = Jinja2Templates(directory="templates")
 
+
+# -------------------------------------------------------------
+# 1. Rota HTML (Renderiza o template via Jinja2)
+# -------------------------------------------------------------
+@event_router.get("/ui", response_class=HTMLResponse)
+async def render_events_page(request: Request):
+    return templates.TemplateResponse(
+        "events.html", 
+        {"request": request, "events": events}
+    )
 
 # 1. Rota principal para listar todos os eventos (com validação e documentação)
 @event_router.get("/", response_model=List[Event])
