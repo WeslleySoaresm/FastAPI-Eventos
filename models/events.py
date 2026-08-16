@@ -9,7 +9,7 @@ class Event(BaseModel):
     title: str
     date: str # ex: "2026-09-20"
     organizer: str #organizador
-    image: str
+    image: Optional[str] = None
     description: str
     tags: List[str] 
     location: str

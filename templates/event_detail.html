@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }} - Detalhes{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <a href="/event/ui" class="text-indigo-600 hover:underline text-sm">← Voltar para a lista</a>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-3xl">
+    <h1 class="text-3xl font-bold text-slate-900 mb-4">{{ event.title }}</h1>
+    
+    <div class="grid grid-cols-2 gap-4 mb-6 text-sm bg-slate-50 p-4 rounded-lg">
+        <div><strong>Data:</strong> {{ event.date if event.date else 'Não informada' }}</div>
+        <div><strong>Organizador:</strong> {{ event.organizer if event.organizer else 'Não informado' }}</div>
+        <div><strong>Local:</strong> {{ event.location }}</div>
+        <div><strong>ID do Evento:</strong> #{{ event.id }}</div>
+    </div>
+
+    <p class="text-slate-700 leading-relaxed mb-6">{{ event.description }}</p>
+
+    <div class="flex gap-2">
+        {% for tag in event.tags %}
+        <span class="bg-indigo-50 text-indigo-700 text-xs px-2.5 py-1 rounded-md border border-indigo-100">
+            #{{ tag }}
+        </span>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
