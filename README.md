@@ -12,11 +12,7 @@ Além dos endpoints RESTful, a aplicação conta com uma interface Web acessíve
 
 ---
 
-### 📝 README.md Completo e Atualizado
 
-Para facilitar a substituição no seu arquivo, aqui está o **`README.md`** na íntegra com a nova seção aplicada:
-
-```markdown
 # 📅 FastAPI Eventos API (`FastAPI-Eventos`)
 
 **Disciplina:** Arquitetura e Segurança de APIs REST com FastAPI — TP1  
@@ -62,7 +58,7 @@ FastAPI-Eventos/
 ├── README.md               # Documentação técnica do projeto
 └── requirements.txt        # Registro de dependências do projeto
 
-```
+
 
 ---
 
