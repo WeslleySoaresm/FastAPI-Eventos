@@ -1,42 +1,114 @@
 
-
-## 🖥️ Interface de Usuário (UI)
-
-Além dos endpoints RESTful, a aplicação conta com uma interface Web acessível via navegador:
-
-* **`/event/ui`**: Painel principal para listagem de todos os eventos cadastrados.
-* **`/event/ui/new`**: Formulário interativo estilizado com **Tailwind CSS** para cadastro de novos eventos sem necessidade de depender do Swagger.
-* **`/event/ui/audit`**: Relatório de Auditoria de Segurança focado nos pilares CIA (Confidencialidade, Integridade e Disponibilidade).
-
-```
-
----
-
-
 # 📅 FastAPI Eventos API (`FastAPI-Eventos`)
+
+![FastAPI](https://img.shields.io/badge/FastAPI-005587?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Security](https://img.shields.io/badge/Security-OWASP_|_NIST_|_MITRE-red?style=for-the-badge)
 
 **Disciplina:** Arquitetura e Segurança de APIs REST com FastAPI — TP1  
 **Repositório:** `FastAPI-Eventos`
 
-API RESTful e aplicação web desenvolvida em **FastAPI** e **Pydantic** para gerenciamento de eventos. O projeto contempla operações completas de CRUD, validação de dados em tempo de execução, controle de exposição de dados sensíveis, interface web interativa renderizada com **Jinja2** e **Tailwind CSS**, além de arquitetura de segurança alinhada aos frameworks **OWASP**, **NIST SSDF** e **MITRE ATT&CK**.
+API RESTful e aplicação web desenvolvida com **FastAPI** e **Pydantic** para gerenciamento de eventos. O projeto contempla operações completas de CRUD, validação de dados em tempo de execução, controle de exposição de dados sensíveis, interface web interativa renderizada com **Jinja2** e **Tailwind CSS**, além de arquitetura de segurança alinhada aos frameworks **OWASP**, **NIST SSDF** e **MITRE ATT&CK**.
+
+---
+
+## 📌 Sumário
+- [🚀 Como Executar o Projeto](#-como-executar-o-projeto)
+- [🖥️ Interface de Usuário (UI)](#️-interface-de-usuário-ui)
+- [🛠️ Arquitetura e Módulos do Projeto](#️-arquitetura-e-módulos-do-projeto)
+- [📁 Estrutura de Pastas](#-estrutura-de-pastas)
+- [📝 Resumo dos Exercícios do TP1](#-resumo-dos-exercícios-do-tp1)
+- [📊 Avaliação pela Tríade CIA (Exercício 7)](#-avaliação-pela-tríade-cia-exercício-7)
+- [🔒 Segurança e Modelagem de Ameaças (Exercício 8)](#-segurança-e-modelagem-de-ameaças-exercício-8)
+
+---
+
+## 🚀 Como Executar o Projeto
+
+### Pró-requisitos
+Certifique-se de ter o **Python 3.10+** instalado em sua máquina.
+
+### Passos para execução
+
+1. **Clone o repositório e acesse a pasta:**
+   ```bash
+   git clone <url-do-repositorio>
+   cd FastAPI-Eventos
+
+```
+
+2. **Crie e ative o ambiente virtual:**
+* **Linux / macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+
+```
+
+
+* **Windows:**
+```powershell
+python -m venv venv
+.\venv\Scripts\activate
+
+```
+
+
+
+
+3. **Instale as dependências:**
+```bash
+pip install -r requirements.txt
+
+```
+
+
+4. **Inicie o servidor Uvicorn:**
+```bash
+uvicorn main:app --reload
+
+```
+
+
+5. **Acesse as rotas no navegador:**
+* 🎨 **Painel Web (Listagem UI):** [http://127.0.0.1:8000/event/ui](http://127.0.0.1:8000/event/ui)
+* 📝 **Formulário de Cadastro:** [http://127.0.0.1:8000/event/ui/new](http://127.0.0.1:8000/event/ui/new)
+* 🛡️ **Relatório de Auditoria CIA:** [http://127.0.0.1:8000/event/ui/audit](http://127.0.0.1:8000/event/ui/audit)
+* 📖 **Documentação Interativa (Swagger):** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+
+
+---
+
+## 🖥️ Interface de Usuário (UI)
+
+A aplicação vai além da API JSON e disponibiliza uma interface Web amigável e estilizada:
+
+* **`/event/ui`**: Painel principal para visualização dinâmica de todos os eventos cadastrados.
+* **`/event/ui/new`**: Formulário interativo estilizado com **Tailwind CSS** para cadastro direto de eventos sem necessidade da interface do Swagger.
+* **`/event/ui/audit`**: Dashboard interativo exibindo o relatório de Auditoria de Segurança focado nos pilares da Tríade CIA.
 
 ---
 
 ## 🛠️ Arquitetura e Módulos do Projeto
 
-| Arquivo / Diretório | Camada | Responsabilidade Principal |
-| :--- | :--- | :--- |
-| `main.py` | **Aplicação** | Ponto de entrada (`entrypoint`). Instancia o `FastAPI()`, inclui as rotas registradas no `APIRouter` e define endpoints globais como o status do serviço (`GET /`). |
-| `data/db.py` | **Persistência** | Responsável pelo armazenamento e gerenciamento do estado dos dados. Mantém as coleções em memória (listas Python) e abstrai a manipulação de leitura e escrita da camada de roteamento. |
-| `models/events.py` | **Domínio / Validação** | Define os esquemas de dados utilizando **Pydantic (`BaseModel`)**. Garante a tipagem estrita dos campos do evento, define valores padrão e aplica o `response_model` para controle de segurança. |
-| `models/users.py` | **Domínio / Validação** | Define esquemas Pydantic voltados aos usuários e organizadores do sistema. |
-| `router/events.py` | **Controlador (API & UI)** | Contém as definições das rotas HTTP RESTful (`GET`, `POST`, `PUT`, `DELETE`) e rotas HTML (`/event/ui`, `/event/ui/new`, `/event/ui/audit`). Trata `Form(...)`, exibe `HTTPException` e gerencia redirecionamentos (`RedirectResponse`). |
-| `templates/` | **Visão (Frontend)** | Arquivos HTML dinâmicos utilizando o motor **Jinja2**. Inclui o layout mestre (`base.html`), listagem (`events.html`), formulário em Tailwind CSS (`new_event.html`), detalhes (`event_detail.html`) e auditoria (`cia_audit.html`). |
-| `requirements.txt` | **Infraestrutura** | Declara todas as bibliotecas do projeto (ex.: `fastapi`, `uvicorn`, `pydantic`, `jinja2`, `python-multipart`), garantindo a reprodutibilidade do ambiente. |
+A aplicação adota uma arquitetura em camadas clara e desacoplada:
+
+| Camada | Arquivo / Diretório | Responsabilidade Principal |
+| --- | --- | --- |
+| **Ponto de Entrada** | `main.py` | Instancia o `FastAPI()`, inclui roteadores (`APIRouter`) e expõe endpoints globais de *healthcheck* (`GET /`). |
+| **Persistência** | `data/db.py` | Mantém o estado dos dados em memória (listas Python) e abstrai as operações de leitura e escrita. |
+| **Domínio / Validação** | `models/events.py`<br>
+
+<br>`models/users.py` | Esquemas **Pydantic (`BaseModel`)** com tipagem estrita, sanitização de campos e filtro de resposta (`response_model`). |
+| **Controlador** | `router/events.py` | Gerencia rotas RESTful JSON (`GET`, `POST`, `PUT`, `DELETE`) e rotas Web HTML (`/event/ui`), tratando formulários (`Form`) e exceções (`HTTPException`). |
+| **Visão (Frontend)** | `templates/` | Templates HTML dinâmicos em **Jinja2** com estilização **Tailwind CSS** e uso de herança de layout (`base.html`). |
+| **Infraestrutura** | `requirements.txt` | Mapeia todas as dependências do ecossistema do projeto (`fastapi`, `uvicorn`, `pydantic`, `jinja2`, etc.). |
 
 ---
 
-## 📁 Estrutura de Pastas do Repositório
+## 📁 Estrutura de Pastas
 
 ```text
 FastAPI-Eventos/
@@ -46,77 +118,70 @@ FastAPI-Eventos/
 │   ├── events.py           # Modelos Pydantic para validação e response_model
 │   └── users.py            # Schemas Pydantic para usuários e organizadores
 ├── router/
-│   └── events.py           # Roteamento de rotas JSON e rotas da interface UI
+│   └── events.py           # Roteamento de endpoints JSON REST e rotas UI HTML
 ├── templates/
-│   ├── base.html           # Template mestre com layout e Tailwind CSS
+│   ├── base.html           # Template mestre (Layout global com Tailwind CSS)
 │   ├── cia_audit.html      # Página do relatório de auditoria da Tríade CIA
-│   ├── event_detail.html   # Detalhes do evento
-│   ├── events.html         # Listagem de eventos cadastrados
-│   └── new_event.html      # Formulário estilizado para novos eventos
+│   ├── event_detail.html   # Visualização detalhada do evento
+│   ├── events.html         # Painel de listagem de eventos
+│   └── new_event.html      # Formulário interativo de cadastro
 ├── venv/                   # Ambiente virtual Python isolado
-├── main.py                 # Ponto de entrada da aplicação
-├── README.md               # Documentação técnica do projeto
-└── requirements.txt        # Registro de dependências do projeto
+├── main.py                 # Ponto de entrada da aplicação FastAPI
+├── README.md               # Documentação técnica e guia do projeto
+└── requirements.txt        # Registro de dependências externas
 
-
+```
 
 ---
 
 ## 📝 Resumo dos Exercícios do TP1
 
-### Exercício 1: Ambiente Isolado e Servidor Mínimo
+### 🔹 Exercício 1: Ambiente Isolado e Servidor Mínimo
 
-* **Execução:** Criação do ambiente virtual com `virtualenv venv` e instalação do `fastapi` e `uvicorn`.
-* **Resultado:** Ponto de entrada em `main.py` com o endpoint `GET /` retornando `{"status": "API operacional"}`.
+* **Execução:** Configuração do ambiente virtual (`venv`) e instalação dos pacotes base `fastapi` e `uvicorn`.
+* **Resultado:** Endpoint básico `GET /` em `main.py` validando o status da API.
 
-### Exercício 2: Arquitetura Modular com `APIRouter`
+### 🔹 Exercício 2: Arquitetura Modular com `APIRouter`
 
-* **Execução:** As rotas do domínio foram concentradas em `router/events.py` e registradas no `main.py` via `include_router`.
-* **Justificativa:** Separar rotas por recurso impede que o arquivo principal se torne monolítico, garantindo manutenibilidade e permitindo que a equipe desenvolva novos domínios em paralelo sem sobreposição de código.
+* **Execução:** Isolamento das rotas de domínio dentro do módulo `router/events.py`.
+* **Justificativa:** Previne a criação de um arquivo principal monolítico, simplificando a manutenção e permitindo que múltiplos desenvolvedores atuem em módulos distintos simultaneamente sem gerar conflitos no Git.
 
-### Exercício 3: Prevenção de Vazamento com `response_model`
+### 🔹 Exercício 3: Prevenção de Vazamento com `response_model`
 
-* **Execução:** Construção do schema `EventoPublico` em `models/events.py` para filtrar retornos públicos.
-* **Impacto de Segurança:** A versão sem `response_model` exporia campos internos como `organizador_internal_id` e `audit_token`, facilitando ataques de enumeração de recursos e sequestro de sessão por atores maliciosos.
+* **Execução:** Implementação do esquema Pydantic `EventoPublico` para filtragem automatizada dos dados retornados na API.
 
-### Exercício 4: Organização Modular por Responsabilidade
+> ⚠️ **Impacto de Segurança:** A ausência do `response_model` expõe atributos internos e sensíveis, como `organizador_internal_id` e `audit_token`, facilitando cenários de enumeração de recursos e sequestro de tokens por atacantes.
 
-* **Execução:** Divisão clara do projeto nos pacotes `data/`, `models/`, `router/` e `templates/`, estabelecendo fronteiras nítidas para rápida ambientação de novos desenvolvedores.
+### 🔹 Exercício 4: Organização Modular por Responsabilidade
 
-### Exercício 5: Renderização Dinâmica com Jinja2
+* **Execução:** Separação estrita do projeto nos pacotes `data/`, `models/`, `router/` e `templates/`, facilitando o *onboarding* de novos membros na equipe.
 
-* **Execução:** Adição de rotas HTML e templates dinâmicos exibindo nome, data, local e organizador dos eventos sem interferir na rota da API REST JSON (`GET /events`).
+### 🔹 Exercício 5: Renderização Dinâmica com Jinja2
 
-### Exercício 6: Mitigação XSS e Herança de Templates
+* **Execução:** Criação de rotas HTML utilizando `Jinja2Templates` para servir páginas dinâmicas contendo os dados dos eventos sem impactar as rotas da API REST.
 
-* **Sanitização XSS:** O **auto-escaping** nativo do Jinja2 converte caracteres especiais de tags maliciosas (como `<script>`) em entidades HTML (`&lt;script&gt;`), prevenindo execução de JavaScript no navegador do usuário.
-* **Herança:** Utilização de `base.html` como layout base com reutilização de cabeçalho e rodapé em `events.html`, `event_detail.html` e `new_event.html`.
+### 🔹 Exercício 6: Mitigação XSS e Herança de Templates
 
----
-
-## 🖥️ Interface de Usuário (UI)
-
-Além dos endpoints RESTful, a aplicação conta com uma interface Web acessível via navegador:
-
-* **`/event/ui`**: Painel principal para listagem de todos os eventos cadastrados.
-* **`/event/ui/new`**: Formulário interativo estilizado com **Tailwind CSS** para cadastro de novos eventos sem necessidade de depender do Swagger.
-* **`/event/ui/audit`**: Relatório de Auditoria de Segurança focado nos pilares CIA (Confidencialidade, Integridade e Disponibilidade).
+* **Sanitização XSS:** Aproveita o **auto-escaping** padrão do Jinja2 para converter caracteres de *scripts* maliciosos (como `<script>`) em entidades HTML seguras (`&lt;script&gt;`).
+* **Herança:** Centralização do layout mestre em `base.html`, herdado pelas telas secundárias através da diretiva `{% extends "base.html" %}`.
 
 ---
 
-## 📊 Exercício 7: Avaliação pela Tríade CIA
+## 📊 Avaliação pela Tríade CIA (Exercício 7)
 
 | Pilar | Situação Atual | Lacuna Real Observável no Código |
 | --- | --- | --- |
-| **Confidencialidade** | Ocultação de `audit_token` e IDs internos via `response_model` no Pydantic. | Ausência de controle de acesso e autenticação (JWT/OAuth2) nas rotas públicas. |
-| **Integridade** | Validação de tipos e dados obrigatórios via Pydantic em `models/events.py`. | Inexistência de controle de permissões por usuário (RBAC) no banco em memória. |
-| **Disponibilidade** | Servidor FastAPI executado sobre arquitetura assíncrona com Uvicorn. | Ausência de camada de Rate Limiting (Redis) para conter requisições massivas. |
+| **Confidencialidade** | Ocultação de `audit_token` e IDs internos no JSON público via `response_model`. | Ausência de autenticação e autorização (ex.: JWT, OAuth2); qualquer cliente pode consultar os endpoints. |
+| **Integridade** | Validação de tipos, presença de campos obrigatorios e regras de schema via Pydantic. | Falta de controle de acesso baseado em papéis (RBAC), permitindo modificações indiscriminadas no banco em memória. |
+| **Disponibilidade** | Arquitetura assíncrona orientada a alta performance com FastAPI + Uvicorn. | Inexistência de um middleware de *Rate Limiting* (ex.: Redis/slowapi) para contenção de ataques DoS/brute-force. |
 
 ---
 
-## 🔒 Arquitetura de Segurança e Modelagem de Ameaças (Exercício 8)
+## 🔒 Segurança e Modelagem de Ameaças (Exercício 8)
 
 ### Diagrama de Fluxo de Dados (DFD)
+
+O diagrama abaixo ilustra as **Fronteiras de Confiança (Trust Boundaries)** da aplicação durante o ciclo de processamento da informação:
 
 ```text
        [ Usuário / Navegador / Cliente HTTP ] (Não Confiável)
@@ -145,51 +210,17 @@ Além dos endpoints RESTful, a aplicação conta com uma interface Web acessíve
 
 ```
 
-* **Trust Boundary 1 (TB1):** Separa requisições externas não confiáveis da camada interna do FastAPI.
-* **Trust Boundary 2 (TB2):** Separa a validação de regras de negócio da camada de armazenamento em memória (`data/db.py`).
-* **Fluxo de Dados Sensível:** O parâmetro **`organizer`** (assim como `location` e `date`), vindo da **TB1** pelo formulário `POST /event/ui/new`, é sanitizado e validado via Pydantic (Processo 2.0) antes de atingir a **TB2**.
+* **Trust Boundary 1 (TB1):** Limite entre a rede externa/clientes não confiáveis e os manipuladores de rotas internos do FastAPI.
+* **Trust Boundary 2 (TB2):** Limite entre as regras de validação/negócio e o banco de dados em memória (`data/db.py`).
+* **Fluxo Sensível:** Os dados de formulário enviados via `POST /event/ui/new` passam obrigatoriamente pela validação e sanitização do Pydantic (Processo 2.0) na **TB1** antes de serem persistidos na **TB2**.
 
 ### Tabela de Mapeamento dos Frameworks de Segurança
 
-| Framework | Foco do Framework | Controle de Segurança Concreto | Aplicação no `eventos-api` |
+| Framework | Foco do Framework | Controle Concreto Aplicado | Aplicação Prática no Projeto |
 | --- | --- | --- | --- |
-| **OWASP** *(Top 10)* | Mitigação de vulnerabilidades Web | **Escape Automático no Jinja2** | O Jinja2 realiza o escape automático de HTML na renderização de variáveis (`{{ event.organizer }}`), prevenindo **Cross-Site Scripting (XSS)**. |
-| **NIST SSDF** *(SP 800-218)* | Desenvolvimento seguro e ambiente | **Isolamento de Ambiente (`venv`)** | Uso de ambiente virtual isolado para gerenciamento de dependências, prevenindo contaminação por pacotes vulneráveis do SO. |
-| **MITRE ATT&CK** | Mapeamento de táticas e técnicas | **`response_model` no FastAPI** | Garante que os retornos da API limitem a exposição de dados estritamente ao esquema do Pydantic, mitigando **Data Exposure (T1592)**. |
-
----
-
-## 🚀 Como Executar o Projeto
-
-1. **Ative o ambiente virtual:**
-```bash
-source venv/bin/activate    # Linux/macOS
-# .\venv\Scripts\activate   # Windows
-
-```
-
-
-2. **Instale as dependências:**
-```bash
-pip install -r requirements.txt
-
-```
-
-
-3. **Inicie o servidor Uvicorn:**
-```bash
-uvicorn main:app --reload
-
-```
-
-
-4. **Acesse as interfaces e rotas:**
-* **Painel Web (Interface UI):** `http://127.0.0.1:8000/event/ui`
-* **Formulário de Cadastro:** `http://127.0.0.1:8000/event/ui/new`
-* **Relatório de Auditoria CIA:** `http://127.0.0.1:8000/event/ui/audit`
-* **Documentação Swagger (OpenAPI):** `http://127.0.0.1:8000/docs`
-
-
+| **OWASP** *(Top 10)* | Mitigação de falhas e vulnerabilidades Web | **Escape Automático no Jinja2** | Neutralização automatizada de vetores de **Cross-Site Scripting (XSS)** na renderização das variáveis em tela (`{{ event.organizer }}`). |
+| **NIST SSDF** *(SP 800-218)* | Segurança no ciclo de vida de software | **Isolamento via `venv**` | Proteção da cadeia de suprimentos garantindo dependências isoladas e reproduzíveis, evitando a contaminação do ambiente operacional. |
+| **MITRE ATT&CK** | Mapeamento de técnicas de ataque | **Filtro `response_model**` | Dificulta a fase de **Reconnaissance / Exposição de Dados (T1592)** ao omitir dados e tokens internos nas respostas REST. |
 
 ```
 
