@@ -29,7 +29,28 @@
                 <td class="px-6 py-4 text-slate-600">{{ event.organizer if event.organizer else 'N/A' }}</td>
                 <td class="px-6 py-4 text-slate-600">📍 {{ event.location }}</td>
                 <td class="px-6 py-4">
-                    <a href="/event/ui/{{ event.id }}" class="text-indigo-600 hover:text-indigo-800 font-medium">Ver detalhes →</a>
+                   <!-- Botão Ver Detalhes -->
+                    <a href="/ui/{{ event.id }}" 
+                    class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-lg text-xs font-semibold transition-all duration-150 border border-slate-200 hover:border-indigo-200 shadow-sm" 
+                    title="Ver detalhes">
+                        Detalhes
+                        <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+
+                    <!-- Botão Editar -->
+                    <a href="/ui/edit/{{ event.id }}" 
+                    class="inline-flex items-center px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 hover:text-amber-800 rounded-lg text-xs font-semibold transition-all duration-150 border border-amber-200/60 shadow-sm">
+                        Editar
+                    </a>
+
+                    <!-- Botão Deletar -->
+                    <form action="/ui/delete/{{ event.id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');" class="inline">
+                        <button type="submit" 
+                                class="inline-flex items-center px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-800 rounded-lg text-xs font-semibold transition-all duration-150 border border-rose-200/60 shadow-sm cursor-pointer">
+                            Excluir
+                        </button>
                 </td>
             </tr>
             {% else %}

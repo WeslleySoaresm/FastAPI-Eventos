@@ -1,13 +1,14 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from router.events_api import api_router
+from router.events_ui import ui_router
+from router.auth_router import api_auth
 
-from router.events import event_router
- 
-app = FastAPI()
+app = FastAPI(title="Gestão de Eventos")
 
-app.include_router(event_router, prefix="/event")
+app.include_router(api_router, prefix="/event")
+app.include_router(ui_router, prefix="/ui")
+app.include_router(api_auth, prefix="/auth")
 
-
-@app.get("/")
-async def status_serviço():
-    return "Serviço Ativo -> API de Eventos"
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", reload=True)

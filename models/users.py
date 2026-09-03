@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-
+ pwd_context = Cryp
 
 class User(BaseModel):
     id: int

@@ -15,13 +15,21 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <span class="text-2xl">📅</span>
-                <a href="/event/ui" class="text-xl font-bold tracking-tight hover:text-indigo-100 transition-colors">FastAPI Eventos</a>
-                <a href="/event/ui/audit" class="hover:text-indigo-200 transition-colors text-sm font-medium">Auditoria CIA</a>
-                <a href="/event/ui/new" class="bg-indigo-500 hover:bg-indigo-400 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-colors">
+                <a href="/ui" class="text-xl font-bold tracking-tight hover:text-indigo-100 transition-colors">FastAPI Eventos</a>
+                <a href="/ui/audit" class="hover:text-indigo-200 transition-colors text-sm font-medium">Auditoria CIA</a>
+                <a href="/ui/new" class="bg-indigo-500 hover:bg-indigo-400 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-colors">
                     + Cadastrar Evento
                 </a>
             </div>
-            <span class="bg-indigo-700 text-indigo-100 text-xs px-3 py-1 rounded-full font-medium">Painel de Operações</span>
+            
+            <div class="flex items-center space-x-3">
+                <span class="bg-indigo-700 text-indigo-100 text-xs px-3 py-1 rounded-full font-medium">Painel de Operações</span>
+                <!-- Botão de Sair / Logout -->
+                <a href="/ui/logout" class="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors shadow-sm flex items-center space-x-1">
+                    <span>🚪</span>
+                    <span>Sair</span>
+                </a>
+            </div>
         </div>
     </nav>
 
