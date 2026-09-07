@@ -15,28 +15,23 @@
         <thead>
             <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 uppercase text-xs">
                 <th class="px-6 py-4 font-semibold">Evento</th>
-                <th class="px-6 py-4 font-semibold">Data</th>
-                <th class="px-6 py-4 font-semibold">Organizador</th>
+                <th class="px-6 py-4 font-semibold">Descrição</th>
                 <th class="px-6 py-4 font-semibold">Local</th>
-                <th class="px-6 py-4 font-semibold">Ação</th>
+                <th class="px-6 py-4 font-semibold text-right">Ações</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-sm">
             {% for event in events %}
             <tr class="hover:bg-slate-50">
                 <td class="px-6 py-4 font-semibold text-slate-900">{{ event.title }}</td>
-                <td class="px-6 py-4 text-slate-600">{{ event.date if event.date else 'N/A' }}</td>
-                <td class="px-6 py-4 text-slate-600">{{ event.organizer if event.organizer else 'N/A' }}</td>
+                <td class="px-6 py-4 text-slate-600">{{ event.description if event.description else 'Sem descrição' }}</td>
                 <td class="px-6 py-4 text-slate-600">📍 {{ event.location }}</td>
-                <td class="px-6 py-4">
-                   <!-- Botão Ver Detalhes -->
+                <td class="px-6 py-4 text-right space-x-1">
+
+                    <!-- Botão Detalhes -->
                     <a href="/ui/{{ event.id }}" 
-                    class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-lg text-xs font-semibold transition-all duration-150 border border-slate-200 hover:border-indigo-200 shadow-sm" 
-                    title="Ver detalhes">
+                    class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 hover:text-indigo-800 rounded-lg text-xs font-semibold transition-all duration-150 border border-indigo-200/60 shadow-sm">
                         Detalhes
-                        <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
                     </a>
 
                     <!-- Botão Editar -->
@@ -51,11 +46,12 @@
                                 class="inline-flex items-center px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 hover:text-rose-800 rounded-lg text-xs font-semibold transition-all duration-150 border border-rose-200/60 shadow-sm cursor-pointer">
                             Excluir
                         </button>
+                    </form>
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="5" class="px-6 py-8 text-center text-slate-400">Nenhum evento cadastrado.</td>
+                <td colspan="4" class="px-6 py-8 text-center text-slate-400">Nenhum evento cadastrado.</td>
             </tr>
             {% endfor %}
         </tbody>

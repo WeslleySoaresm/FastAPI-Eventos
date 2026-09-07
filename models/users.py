@@ -1,30 +1,27 @@
-from pydantic import BaseModel, EmailStr
- pwd_context = Cryp
+from typing import Optional
+from pydantic import ConfigDict, EmailStr
+from sqlmodel import SQLModel, Field
 
-class User(BaseModel):
-    id: int
-    email: str
+# Tabela do Banco de Dados
+class User(SQLModel, table=True):
+    __tablename__ = "users"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(unique=True, index=True)
+    email: str = Field(unique=True, index=True)
+    hashed_password: str
+    role: str = Field(default="participante")
+
+# Schemas de Entrada / DTOs
+class UserSignIn(SQLModel):
+    email: EmailStr
     password: str
 
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
-                "id": "1",
                 "email": "fastapi@packt.com",
-                "password": "strong!!!",
+                "password": "strong!!!"
             }
         }
-
-
-class UserSignIn(BaseModel):
-    id: str
-    email: str
-    password: str
-
-    schema_extra = {
-        "example": {
-            "id":"1",
-            "email": "fastapi@packt.com",
-            "password": "strong!!!"
-        }
-    }
+    )

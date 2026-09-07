@@ -33,13 +33,15 @@ darkdetect==0.8.0
 debugpy==1.8.21
 decorator==5.2.1
 defusedxml==0.7.1
+Deprecated==1.3.1
 Django==5.2.9
 dnspython==2.8.0
 ecdsa==0.19.2
+email-validator==2.3.0
 et_xmlfile==2.0.0
 executing==2.2.1
 Faker==37.8.0
-fastapi==0.70.0
+fastapi==0.141.1
 fastjsonschema==2.21.2
 filelock==3.20.0
 fonttools==4.62.1
@@ -52,6 +54,7 @@ httpx==0.28.1
 hyperlink==21.0.0
 idna==3.11
 Incremental==24.11.0
+iniconfig==2.3.0
 ipykernel==7.3.0
 ipython==9.16.1
 ipython_pygments_lexers==1.1.1
@@ -76,6 +79,7 @@ jupyterlab_pygments==0.3.0
 jupyterlab_server==2.28.0
 kiwisolver==1.5.0
 lark==1.3.1
+limits==5.8.0
 llvmlite==0.47.0
 lxml==6.0.2
 Mako==1.3.10
@@ -105,6 +109,7 @@ pcapy-ng==1.1.0
 pexpect==4.9.0
 pillow==12.0.0
 platformdirs==4.11.0
+pluggy==1.6.0
 prometheus_client==0.23.1
 prompt_toolkit==3.0.53
 Protego==0.5.0
@@ -118,8 +123,9 @@ pyarrow==22.0.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.23
-pydantic==1.10.26
-pydantic_core==2.46.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+pydantic_core==2.46.5
 pydeck==0.9.1
 PyDispatcher==2.0.7
 Pygments==2.20.0
@@ -128,6 +134,7 @@ PyMySQL==1.1.2
 pyOpenSSL==25.3.0
 pyparsing==3.3.2
 PySocks==1.7.1
+pytest==9.1.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-jose==3.5.0
@@ -154,14 +161,16 @@ Send2Trash==1.8.3
 service-identity==24.2.0
 setuptools==80.9.0
 six==1.17.0
+slowapi==0.1.10
 smmap==5.0.2
 sniffio==1.3.1
 sortedcontainers==2.4.0
 soupsieve==2.8
 SQLAlchemy==2.0.44
+sqlmodel==0.0.42
 sqlparse==0.5.4
 stack-data==0.6.3
-starlette==0.16.0
+starlette==1.6.0
 streamlit==1.52.1
 streamlit-option-menu==0.4.0
 tabulate==0.9.0
@@ -180,7 +189,7 @@ typing_extensions==4.16.0
 tzdata==2025.2
 uri-template==1.3.0
 urllib3==2.5.0
-uvicorn==0.15.0
+uvicorn==0.52.4
 w3lib==2.3.1
 watchdog==6.0.0
 wcwidth==0.8.2
@@ -189,5 +198,6 @@ webdriver-manager==4.0.2
 webencodings==0.5.1
 websocket-client==1.9.0
 websockets==17.1
+wrapt==2.4.0
 wsproto==1.2.0
 zope.interface==8.1.1

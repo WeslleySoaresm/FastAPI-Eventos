@@ -7,17 +7,14 @@ import jwt
 from pydantic import BaseModel
 from passlib.context import CryptContext
 
-# Configurações do JWT e Criptografia
-SECRET_KEY = "sua_chave_secreta_super_segura_aqui"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from core.config import settings
+from core.security import limiter
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 api_auth = APIRouter(tags=["Authenticate"])
 
-# Banco de dados simulado para usuários finais
 users_db = {
     "admin": {
         "id": 99,
@@ -45,7 +42,6 @@ users_db = {
     }
 }
 
-# Banco de dados simulado para clientes M2M
 m2m_clients_db = {
     "partner_client_id": {
         "client_secret": "partner_secret_123",
@@ -62,20 +58,18 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-# 1. Funções Auxiliares JWT
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-# 2. Função de Decodificação declarada ANTES de ser usada nas dependências
 def decode_jwt(token: str = Depends(oauth2_scheme)) -> dict:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
     except jwt.PyJWTError:
         raise HTTPException(
@@ -84,11 +78,7 @@ def decode_jwt(token: str = Depends(oauth2_scheme)) -> dict:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-# 3. Validador de Escopos e Roles
-def verify_token_claims(
-    security_scopes: SecurityScopes, 
-    token_payload: dict = Depends(decode_jwt)
-):
+def verify_token_claims(security_scopes: SecurityScopes, token_payload: dict = Depends(decode_jwt)):
     token_scopes = token_payload.get("scope", "").split()
     for required_scope in security_scopes.scopes:
         if required_scope not in token_scopes:
@@ -109,14 +99,13 @@ def verify_token_claims(
 
     return token_payload
 
-# 4. Rota de Autenticação Unificada (M2M + Usuários Finais)
 @api_auth.post("/login", response_model=Token)
+@limiter.limit("5/minute")
 async def login(
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     mfa_code: Optional[str] = Form(None)
 ):
-    # Fluxo M2M (Client Credentials)
     if form_data.grant_type == "client_credentials" or form_data.client_id:
         client_id = form_data.client_id or form_data.username
         client_secret = form_data.client_secret or form_data.password
@@ -130,15 +119,10 @@ async def login(
             )
             
         access_token = create_access_token(
-            data={
-                "sub": client_id,
-                "grant_type": "client_credentials",
-                "scope": client["scopes"]
-            }
+            data={"sub": client_id, "grant_type": "client_credentials", "scope": client["scopes"]}
         )
         return {"access_token": access_token, "token_type": "bearer"}
 
-    # Fluxo Usuários Finais
     user = users_db.get(form_data.username)
     if not user or not verify_password(form_data.password, user["hashed_password"]):
         raise HTTPException(
@@ -180,15 +164,10 @@ async def login(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-# 5. Rota Protegida por Escopo (Sintaxe corrigida)
-@api_auth.post(
-    "/events/sync",
-    dependencies=[Security(verify_token_claims, scopes=["events:sync-inventory"])]
-)
+@api_auth.post("/events/sync", dependencies=[Security(verify_token_claims, scopes=["events:sync-inventory"])])
 async def sync_partner_inventory():
     return {"status": "Sincronização realizada com sucesso"}
 
-# 6. Injeção para obter o usuário logado
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -204,3 +183,13 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
         raise credentials_exception
         
     return User(id=user_id, username=username, role=role)
+
+def check_ownership(resource_owner_id: int, current_user: User):
+    if current_user.role == "admin":
+        return True
+    if current_user.id != resource_owner_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Acesso negado: Você não possui permissão para este recurso."
+        )
+    return True

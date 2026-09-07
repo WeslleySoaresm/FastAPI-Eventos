@@ -15,7 +15,6 @@
     </div>
 </div>
 
-<!-- Resumo em Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div class="flex items-center space-x-3 mb-2">
@@ -42,7 +41,6 @@
     </div>
 </div>
 
-<!-- Tabela da Tríade CIA -->
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
         <h3 class="font-semibold text-slate-800">Matriz de Avaliação do MVP</h3>
@@ -57,45 +55,36 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-sm">
-                <!-- Confidencialidade -->
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">
-                        🔒 Confidencialidade
-                    </td>
+                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">🔒 Confidencialidade</td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed">
-                        O filtro de saída via <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs">response_model</code> nas rotas da API e o <em>auto-escaping</em> nativo do Jinja2 na interface HTML impedem a exposição indevida de propriedades não declaradas no Pydantic e ataques de XSS.
+                        O filtro de saída via <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs">response_model</code> e auto-escaping do Jinja2 garantem a segurança da renderização.
                     </td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed bg-amber-50/50">
-                        <strong class="text-amber-800 block mb-1">Falta de Autenticação e Autorização:</strong>
-                        Não há controle de acesso, tokens JWT ou gerenciamento de sessão nas rotas (<code class="text-xs bg-amber-100 px-1 py-0.5 rounded">GET</code>, <code class="text-xs bg-amber-100 px-1 py-0.5 rounded">POST</code>). Qualquer pessoa com o link da API ou da interface pode visualizar e cadastrar eventos.
+                        <strong class="text-amber-800 block mb-1">Controle de Acesso:</strong>
+                        Implementação do Middleware de Autenticação JWT e Cookie HTTP-Only.
                     </td>
                 </tr>
 
-                <!-- Integridade -->
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">
-                        🛡️ Integridade
-                    </td>
+                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">🛡️ Integridade</td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed">
-                        O uso dos modelos Pydantic (<code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs">Event</code>) garante a validação de tipos, obrigatoriedade de campos de entrada no <code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs">POST</code> e saneamento automático de dados inseridos pela API.
+                        Validação de esquemas com SQLModel / Pydantic.
                     </td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed bg-amber-50/50">
-                        <strong class="text-amber-800 block mb-1">Falta de Persistência Confiável:</strong>
-                        Os dados estão armazenados em uma lista na memória RAM (<code class="text-xs bg-amber-100 px-1 py-0.5 rounded">db.py</code>). Se a aplicação for reiniciada, falhar ou sofrer concorrência de requisições simultâneas, o estado pode ser corrompido ou zerado.
+                        <strong class="text-amber-800 block mb-1">Persistência Confiável:</strong>
+                        O banco PostgreSQL garante integridade referencial com ACID.
                     </td>
                 </tr>
 
-                <!-- Disponibilidade -->
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">
-                        ⚡ Disponibilidade
-                    </td>
+                    <td class="px-6 py-4 font-bold text-indigo-600 align-top">⚡ Disponibilidade</td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed">
-                        A aplicação é leve, assíncrona (<code class="bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded text-xs">async/await</code>) e responde com rapidez no servidor Uvicorn para requisições convencionais de leitura e escrita.
+                        Servidor Uvicorn executando rotas assíncronas.
                     </td>
                     <td class="px-6 py-4 text-slate-700 align-top leading-relaxed bg-amber-50/50">
-                        <strong class="text-amber-800 block mb-1">Ausência de Rate Limiting e Paginação:</strong>
-                        A rota <code class="text-xs bg-amber-100 px-1 py-0.5 rounded">GET /event/</code> retorna todos os itens da memória de uma só vez e o endpoint <code class="text-xs bg-amber-100 px-1 py-0.5 rounded">POST /event/new</code> aceita requisições ilimitadas sem restrição de taxa, tornando o serviço vulnerável a negação de serviço (DoS/OOM).
+                        <strong class="text-amber-800 block mb-1">Proteção contra DoS:</strong>
+                        Rate Limiting habilitado via SlowAPI.
                     </td>
                 </tr>
             </tbody>
