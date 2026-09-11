@@ -1,3 +1,0 @@
-#Configuração do banco
-
-events = []
